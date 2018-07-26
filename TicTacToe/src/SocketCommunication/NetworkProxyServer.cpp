@@ -41,7 +41,7 @@ void initServer()
 		exit(EXIT_FAILURE);
 	}
 	
-	if (listen(serverFd, 3) == -1)
+	if (listen(serverFd, 1) == -1)
 	{
 		perror("listen");
 		exit(EXIT_FAILURE);
@@ -56,10 +56,12 @@ void initServer()
 	}
 	
 	char buffer[1024] = { 0 };
-	const auto valread = read(newSocket, buffer, sizeof(buffer));
-	std::cout << "[Server]: " << buffer << std::endl;
-	(void)valread;
-	
+	while (true)
+	{
+		const auto valread = read(newSocket, buffer, sizeof(buffer));
+		std::cout << "[Server]: " << buffer << std::endl;
+		(void)valread;
+	}
 	const char* msg = "hey from server";
 	send(newSocket, msg, strlen(msg), 0);
 	std::cout << "Ms sent from server" << std::endl;

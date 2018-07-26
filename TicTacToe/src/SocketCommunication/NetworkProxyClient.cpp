@@ -38,6 +38,7 @@ void initClient()
 	
 	const char* msg = "Hello from CLIENT!";
 	send(sock, msg, strlen(msg), 0);
+	send(sock, msg, strlen(msg), 0);
 	std::cout << "msg sent from client" << std::endl;
 	
 	char buf[1024] = { 0 };
