@@ -18,6 +18,42 @@ SocketServer::~SocketServer()
 {
 }
 
+SocketServer* SocketServer::wizardSetup()
+{
+	int port;
+	
+	std::cout << "Creating the server" << std::endl;
+	std::cout << "Enter an integer port. (ex: 8000): ";
+	std::cin >> port;
+	
+	auto server = new SocketCommunication::SocketServer();
+	try
+	{
+		server->setup(port);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr
+			<< "Failed to initalize the server: "
+			<< e.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	
+	std::cout << "Waiting for a player..." << std::endl;
+	try
+	{
+		server->startAcceptingConnections();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Failed to connect with others: " << e.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	std::cout << "Successfully connected" << std::endl;
+	
+	return server;
+}
+
 void SocketServer::setup(int port)
 {
 	if ((m_serverFd = socket(AF_INET, SOCK_STREAM, 0)) == -1)

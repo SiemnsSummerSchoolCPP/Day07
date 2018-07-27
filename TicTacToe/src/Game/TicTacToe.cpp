@@ -11,18 +11,18 @@ const char TicTacToe::filler = ' ';
 ** Getters & setters.
 */
 
-size_t TicTacToe::getWidth() const { return width; }
-size_t TicTacToe::getHeight() const { return height; }
+size_t TicTacToe::getWidth() const { return m_width; }
+size_t TicTacToe::getHeight() const { return m_height; }
 size_t TicTacToe::getWinLength() const { return winLength; }
-const char* const* TicTacToe::getBoard() const { return board; }
+const char* const* TicTacToe::getBoard() const { return m_board; }
 
 /*
 ** Constructors & destructors.
 */
 
 TicTacToe::TicTacToe(const size_t width, const size_t height):
-	width(width),
-	height(height),
+	m_width(width),
+	m_height(height),
 	winLength(std::min(width, height))
 {
 	if (width < 2 || height < 2)
@@ -30,26 +30,26 @@ TicTacToe::TicTacToe(const size_t width, const size_t height):
 		throw Exceptions::InvalidGameSize();
 	}
 	
-	board = new char*[height];
+	m_board = new char*[height];
 	for (int i = 0; i < height; i++)
 	{
-		board[i] = new char[width];
-		memset(board[i], filler, width * sizeof(**board));
+		m_board[i] = new char[width];
+		memset(m_board[i], filler, width * sizeof(**m_board));
 	}
 }
 
 TicTacToe::~TicTacToe()
 {
-	if (board)
+	if (m_board)
 	{
-		for (int i = 0; i < height; i++)
+		for (int i = 0; i < m_height; i++)
 		{
-			if (board[i])
+			if (m_board[i])
 			{
-				delete[] board[i];
+				delete[] m_board[i];
 			}
 		}
-		delete[] board;
+		delete[] m_board;
 	}
 }
 
@@ -57,14 +57,28 @@ TicTacToe::~TicTacToe()
 ** Public methods.
 */
 
+bool TicTacToe::boardIsFilled() const
+{
+	for (size_t i = 0; i < m_height; i++)
+	{
+		for (size_t j = 0; j < m_width; j++)
+		{
+			if (m_board[i][j] == filler)
+				return false;
+		}
+	}
+	
+	return true;
+}
+
 bool TicTacToe::isValidMove(const size_t x, const size_t y) const
 {
-	if (x >= width || y >= height)
+	if (x >= m_width || y >= m_height)
 	{
 		return false;
 	}
 	
-	return board[y][x] == filler;
+	return m_board[y][x] == filler;
 }
 
 bool TicTacToe::charIsAWinner(const char playerCharacter) const
@@ -75,12 +89,12 @@ bool TicTacToe::charIsAWinner(const char playerCharacter) const
 		completedObliqueLine(playerCharacter);
 }
 
-bool TicTacToe::executeMove(char playerCharacter, size_t posX, size_t posY)
+bool TicTacToe::executeMove(const GameMoveModel& model)
 {
-	if (!isValidMove(posX, posY))
+	if (!isValidMove(model.x, model.y))
 		return false;
 	
-	board[posY][posX] = playerCharacter;
+	m_board[model.y][model.x] = model.playerChar;
 	return true;
 }
 
@@ -95,12 +109,12 @@ size_t TicTacToe::countConsecutiveChars(
 	const int directionX,
 	const int directionY) const
 {
-	if (posX < 0 || posX >= width || posY < 0 || posY >= height)
+	if (posX < 0 || posX >= m_width || posY < 0 || posY >= m_height)
 	{
 		return 0;
 	}
 	
-	if (board[posY][posX] != targetChar)
+	if (m_board[posY][posX] != targetChar)
 	{
 		return 0;
 	}
@@ -115,9 +129,9 @@ size_t TicTacToe::countConsecutiveChars(
 
 bool TicTacToe::completedHorizontalLine(const char targetChar) const
 {
-	for (int i = 0; i < height; i++)
+	for (int i = 0; i < m_height; i++)
 	{
-		for (int j = 0; j <= width - winLength; j++)
+		for (int j = 0; j <= m_width - winLength; j++)
 		{
 			if (countConsecutiveChars(targetChar, j, i, 1, 0) == winLength)
 				return true;
@@ -128,9 +142,9 @@ bool TicTacToe::completedHorizontalLine(const char targetChar) const
 
 bool TicTacToe::completedVerticalLine(const char targetChar) const
 {
-	for (int j = 0; j < width; j++)
+	for (int j = 0; j < m_width; j++)
 	{
-		for (int i = 0; i <= height - winLength; i++)
+		for (int i = 0; i <= m_height - winLength; i++)
 		{
 			if (countConsecutiveChars(targetChar, j, i, 0, 1) == winLength)
 				return true;
@@ -141,7 +155,7 @@ bool TicTacToe::completedVerticalLine(const char targetChar) const
 
 bool TicTacToe::completedObliqueLine(char targetChar) const
 {
-	const auto biggestDif = std::max(height - winLength, width - winLength);
+	const auto biggestDif = std::max(m_height - winLength, m_width - winLength);
 	for (int i = 0; i <= biggestDif; i++)
 	{
 		for (int j = 0; j <= biggestDif; j++)
@@ -153,7 +167,7 @@ bool TicTacToe::completedObliqueLine(char targetChar) const
 			// Right diagonal.
 			auto rightDiagonalCount = countConsecutiveChars(
 				targetChar,
-				width - 1 - j, i,
+				m_width - 1 - j, i,
 				-1, 1);
 			if (rightDiagonalCount == winLength)
 				return true;
@@ -170,19 +184,19 @@ std::ostream& Game::operator<<(std::ostream& o, const TicTacToe& target)
 {
 	// Print column indexes.
 	o << std::setw(2) << "";
-	for (size_t j = 0; j < target.width; j++)
+	for (size_t j = 0; j < target.m_width; j++)
 	{
 		o << std::setw(2) << std::left << (j % 10);
 	}
 	o << std::endl;
 	
-	for (size_t i = 0; i < target.height; i++)
+	for (size_t i = 0; i < target.m_height; i++)
 	{
 		o << std::setw(2) << std::left << (i % 10);
-		for (size_t j = 0; j < target.width; j++)
+		for (size_t j = 0; j < target.m_width; j++)
 		{
-			o << target.board[i][j];
-			if (j != target.width - 1)
+			o << target.m_board[i][j];
+			if (j != target.m_width - 1)
 			{
 				o << '|';
 			}
@@ -190,10 +204,10 @@ std::ostream& Game::operator<<(std::ostream& o, const TicTacToe& target)
 		
 		// Print a separator line: -+-+-+-
 		o << '\n';
-		if (i != target.height - 1)
+		if (i != target.m_height - 1)
 		{
 			o << std::setw(2) << "";
-			for (int j = 0; j < target.width - 1; j++)
+			for (int j = 0; j < target.m_width - 1; j++)
 			{
 				o << "-+";
 			}

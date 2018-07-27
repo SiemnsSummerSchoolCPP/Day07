@@ -12,6 +12,8 @@ namespace SocketCommunication
 		SocketServer();
 		~SocketServer();
 		
+		static SocketServer* wizardSetup();
+		
 		void setup(int port);
 		void startAcceptingConnections();
 		

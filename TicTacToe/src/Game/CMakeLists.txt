@@ -7,9 +7,11 @@ file(GLOB includeFiles "${CMAKE_SOURCE_DIR}/includes/Game/*")
 file(GLOB srcFiles "*.c" "*.cpp" "*.h" ".hpp")
 add_library(${PROJECT_NAME} SHARED ${includeFiles} ${srcFiles})
 
+target_link_libraries(${PROJECT_NAME} PUBLIC SocketCommunication)
 target_include_directories(
 	${PROJECT_NAME} PRIVATE
-	"${CMAKE_SOURCE_DIR}/includes/Game/")
+	"${CMAKE_SOURCE_DIR}/includes/Game/"
+	"${CMAKE_SOURCE_DIR}/includes/")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
 	ARCHIVE_OUTPUT_DIRECTORY	"${CMAKE_SOURCE_DIR}/bin"

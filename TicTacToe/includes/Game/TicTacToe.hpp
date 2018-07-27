@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GameMoveModel.h"
+
 #include <stddef.h>
 #include <ostream>
 
@@ -18,9 +20,10 @@ namespace Game
 		TicTacToe(size_t width = 3, size_t height = 3);
 		~TicTacToe();
 		
+		bool boardIsFilled() const;
 		bool isValidMove(size_t x, size_t y) const;
 		bool charIsAWinner(char playerCharacter) const;
-		bool executeMove(char playerCharacter, size_t posX, size_t posY);
+		bool executeMove(const GameMoveModel& model);
 
 		friend std::ostream& operator<<(
 			std::ostream& o,
@@ -28,10 +31,10 @@ namespace Game
 		);
 
 	private:
-		const size_t width;
-		const size_t height;
+		const size_t m_width;
+		const size_t m_height;
 		const size_t winLength;
-		char** board = nullptr;
+		char** m_board = nullptr;
 		
 		bool completedHorizontalLine(char targetChar) const;
 		bool completedVerticalLine(char targetChar) const;

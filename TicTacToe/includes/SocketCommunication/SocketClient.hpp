@@ -8,6 +8,8 @@ namespace SocketCommunication
 	class SocketClient : public ISocketProxy
 	{
 	public:
+		static SocketClient* wizardSetup();
+	
 		void setup(const char* ip, int port);
 		
 		void sendMsg(std::string msg) const;

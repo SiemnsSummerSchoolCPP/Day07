@@ -12,6 +12,36 @@
 
 using namespace SocketCommunication;
 
+SocketClient* SocketClient::wizardSetup()
+{
+	std::string ipInput;
+	int portInput;
+	
+	std::cout << "Enter an IP (ex: 127.0.0.1): ";
+	std::cin >> ipInput;
+	
+	std::cout << "Enter a port (ex: 8000): ";
+	std::cin >> portInput;
+	
+	std::cout
+		<< "Trying to connect on "
+		<< ipInput << ":" << portInput << std::endl;
+
+	auto client = new SocketCommunication::SocketClient();
+	try
+	{
+		client->setup(ipInput.c_str(), portInput);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Failed to setup the client: " << e.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	
+	std::cout << "Successfully connected" << std::endl;
+	return client;
+}
+
 void SocketClient::setup(const char* const ip, const int port)
 {
 	m_socket = socket(AF_INET, SOCK_STREAM, 0);
