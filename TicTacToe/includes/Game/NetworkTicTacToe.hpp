@@ -12,6 +12,7 @@ namespace Game
 		bool iAmTheHost() const;
 	
 		NetworkTicTacToe();
+		~NetworkTicTacToe();
 		
 		int setup(bool& itsMyMove, char& startingChar, char& oponentChar);
 		void playGame(const char playingChar, bool itsMyMove) const;

@@ -1,5 +1,6 @@
 #include "NetworkTicTacToe.hpp"
 #include "TicTacToe.hpp"
+#include "GameExceptions.hpp"
 #include "SocketCommunication/SocketClient.hpp"
 #include "SocketCommunication/SocketServer.hpp"
 
@@ -20,6 +21,14 @@ bool NetworkTicTacToe::iAmTheHost() const
 
 NetworkTicTacToe::NetworkTicTacToe()
 {
+}
+
+NetworkTicTacToe::~NetworkTicTacToe()
+{
+	if (m_networkProxy)
+	{
+		delete m_networkProxy;
+	}
 }
 
 int NetworkTicTacToe::setup(
@@ -130,7 +139,10 @@ static void requestAMove(const Game::TicTacToe& game, int& inX, int& inY)
 	{
 		std::cout<< "Give me a move (ex: 0 1): ";
 		std::cin >> inX >> inY;
-		
+	
+		if (std::cin.eof())
+			throw Game::Exceptions::FailedToReadInput();
+	
 		if (game.isValidMove(inX, inY))
 			break;
 		

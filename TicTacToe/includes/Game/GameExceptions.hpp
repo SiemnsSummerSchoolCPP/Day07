@@ -14,5 +14,10 @@ namespace Game { namespace Exceptions {
 	{
 		const char* what() const throw();
 	};
+	
+	struct FailedToReadInput : public GameException
+	{
+		const char* what() const throw();
+	};
 }}
 

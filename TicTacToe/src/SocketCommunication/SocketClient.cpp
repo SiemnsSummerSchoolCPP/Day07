@@ -42,6 +42,19 @@ SocketClient* SocketClient::wizardSetup()
 	return client;
 }
 
+SocketClient::~SocketClient()
+{
+	if (m_socket > 0)
+	{
+		if (close(m_socket) == -1)
+		{
+			std::cerr
+				<< "Failed to close socket: "
+				<< strerror(errno) << std::endl;
+		}
+	}
+}
+
 void SocketClient::setup(const char* const ip, const int port)
 {
 	m_socket = socket(AF_INET, SOCK_STREAM, 0);

@@ -10,12 +10,13 @@ namespace SocketCommunication
 	public:
 		static SocketClient* wizardSetup();
 	
-		void setup(const char* ip, int port);
+		~SocketClient();
 		
+		void setup(const char* ip, int port);
 		void sendMsg(std::string msg) const;
 		std::string receive() const;
 		
 	private:
-		int m_socket;
+		int m_socket = -1;
 	};
 }

@@ -16,6 +16,25 @@ SocketServer::SocketServer()
 
 SocketServer::~SocketServer()
 {
+	if (m_clientSocket > 0)
+	{
+		if (close(m_clientSocket) == -1)
+		{
+			std::cerr
+				<< "Failed to close client socket: "
+				<< strerror(errno) << std::endl;
+		}
+	}
+	
+	if (m_serverFd > 0)
+	{
+		if (close(m_serverFd) == -1)
+		{
+			std::cerr
+				<< "Failed to close server: "
+				<< strerror(errno) << std::endl;
+		}
+	}
 }
 
 SocketServer* SocketServer::wizardSetup()

@@ -9,7 +9,6 @@ target_include_directories(
 	"${CMAKE_SOURCE_DIR}/includes/")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC GameLib)
-target_link_libraries(${PROJECT_NAME} PUBLIC SocketCommunication)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
 	ARCHIVE_OUTPUT_DIRECTORY	"${CMAKE_SOURCE_DIR}/bin"
@@ -19,9 +18,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 # Flags
-# String(CONCAT Flags ${Flags} " " "-Wall")
+String(CONCAT Flags ${Flags} " " "-Wall")
 # String(CONCAT Flags ${Flags} " " "-Wextra")
-# String(CONCAT Flags ${Flags} " " "-Werror")
-# String(CONCAT Flags ${Flags} " " "-Waddress")
-# String(CONCAT Flags ${Flags} " " "-Waggregate-return")
+String(CONCAT Flags ${Flags} " " "-Werror")
+String(CONCAT Flags ${Flags} " " "-Waddress")
+String(CONCAT Flags ${Flags} " " "-Waggregate-return")
 Set(CMAKE_CXX_FLAGS "${Flags}")
