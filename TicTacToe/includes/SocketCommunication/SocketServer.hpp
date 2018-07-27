@@ -2,10 +2,11 @@
 
 #include <string>
 #include <netinet/in.h>
+#include "ISocketProxy.hpp"
 
-namespace SocketProxy
+namespace SocketCommunication
 {
-	class SocketServer
+	class SocketServer : public ISocketProxy
 	{
 	public:
 		SocketServer();
@@ -13,6 +14,7 @@ namespace SocketProxy
 		
 		void setup(int port);
 		void startAcceptingConnections();
+		
 		void sendMsg(std::string msg) const;
 		std::string receive() const;
 		

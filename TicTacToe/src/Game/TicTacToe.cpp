@@ -1,6 +1,7 @@
 #include "TicTacToe.hpp"
 #include "GameExceptions.hpp"
 #include <string.h>
+#include <iomanip>
 
 using namespace Game;
 
@@ -167,8 +168,17 @@ bool TicTacToe::completedObliqueLine(char targetChar) const
 
 std::ostream& Game::operator<<(std::ostream& o, const TicTacToe& target)
 {
+	// Print column indexes.
+	o << std::setw(2) << "";
+	for (size_t j = 0; j < target.width; j++)
+	{
+		o << std::setw(2) << std::left << (j % 10);
+	}
+	o << std::endl;
+	
 	for (size_t i = 0; i < target.height; i++)
 	{
+		o << std::setw(2) << std::left << (i % 10);
 		for (size_t j = 0; j < target.width; j++)
 		{
 			o << target.board[i][j];
@@ -178,9 +188,11 @@ std::ostream& Game::operator<<(std::ostream& o, const TicTacToe& target)
 			}
 		}
 		
+		// Print a separator line: -+-+-+-
 		o << '\n';
 		if (i != target.height - 1)
 		{
+			o << std::setw(2) << "";
 			for (int j = 0; j < target.width - 1; j++)
 			{
 				o << "-+";

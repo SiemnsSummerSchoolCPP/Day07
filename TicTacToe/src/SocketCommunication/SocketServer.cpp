@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include <string.h>
 
-using namespace SocketProxy;
+using namespace SocketCommunication;
 
 SocketServer::SocketServer()
 {

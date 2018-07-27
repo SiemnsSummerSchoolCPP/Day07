@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-using namespace SocketProxy;
+using namespace SocketCommunication;
 
 void SocketClient::setup(const char* const ip, const int port)
 {

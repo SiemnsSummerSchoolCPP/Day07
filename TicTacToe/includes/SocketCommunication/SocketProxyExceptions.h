@@ -1,7 +1,7 @@
 #include <exception>
 #include <string>
 
-namespace SocketProxy { namespace Exceptions
+namespace SocketCommunication { namespace Exceptions
 {
 	struct SocketProxyException : public std::exception
 	{

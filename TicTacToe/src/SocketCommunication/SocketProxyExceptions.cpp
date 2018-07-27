@@ -1,6 +1,6 @@
 #include "SocketProxyExceptions.h"
 
-using namespace SocketProxy::Exceptions;
+using namespace SocketCommunication::Exceptions;
 
 SocketProxyException::SocketProxyException(const char* const msg) : m_msg(msg)
 {
